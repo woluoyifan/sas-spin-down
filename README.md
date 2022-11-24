@@ -2,9 +2,6 @@
 
 Reduce disk drive spin down through sg3utils to save power!
 
-## Usage, Requirements
-
-
 ## Summary
 
 **sas-spin-down.sh** is a rather simple Bash script that enables automatic disk
