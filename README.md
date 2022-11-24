@@ -49,9 +49,16 @@ the disks to monitor. An example may look like this:
 
 If you are interested in customizing each parameter and understanding
 the specific role of different idle modes, you can participate in
-the following document, which comes from Seagate:
+the following document, which comes from Seagate.
 
 [tp608-powerchoice-tech-provides-gb](https://www.seagate.com/files/docs/pdf/en-GB/whitepaper/tp608-powerchoice-tech-provides-gb.pdf)
+
+Or you can look at another document, which comes from western data and
+shows the difference between states.
+
+> 4.5.3.1 Operating Mode Descriptions
+
+[product-manual-ultrastar-dc-hc330-sata-oem-spec](https://documents.westerndigital.com/content/dam/doc-library/en_us/assets/public/western-digital/product/data-center-drives/ultrastar-dc-hc300-series/product-manual-ultrastar-dc-hc330-sata-oem-spec.pdf)
 
 ## License
 This software is released under the terms of the GPL License, see file LICENSE.
