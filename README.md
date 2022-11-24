@@ -32,6 +32,23 @@ If the disk is standby(spun down), the following information would be output:
 
 As you see, idle mode (e.g. `idle_a`,`idle_b`,`idle_c`) will be merged into active display
 
+### stool.sh
+This script is a quick tool. As a simple wrapper for `sdparm`,
+you can forget the complex api and parameters of `sdparm`,
+just remember `-v` for view and `-s` for set.
+
+for view (without path `/dev`)  
+`stool.sh -v DRIVENAME`
+
+example:  
+`stool.sh -v sda`
+
+for set (without path `/dev`)  
+`stool.sh -s KEY VALUE DRIVENAME`
+
+example:  
+`stool.sh -s STANDBY 1 sda`
+
 ## Configuration
 
 **sas-spin-down.sh** uses a simple shell-style configuration file for setting
