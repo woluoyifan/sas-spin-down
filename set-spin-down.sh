@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # let's SAS disk save power
-# require package: sg3-utils smartmontools
+# require package: sg3-utils
 #
 # command like: sdparm --flexible -6 -p po -l /dev/sda
 #
@@ -13,10 +13,10 @@
 #  IDLE_B        1  [cha: y, def:  0, sav:  0]  Idle_b timer enable
 #  IDLE          1  [cha: y, def:  0, sav:  0]  Idle_a timer enable
 #  STANDBY       1  [cha: y, def:  0, sav:  1]  Standby_z timer enable
-#  ICT           1200  [cha: y, def: 20, sav: 20]  Idle_a condition timer (100 ms)
-#  SCT           9000  [cha: y, def:  0, sav:6000]  Standby_z condition timer (100 ms)
-#  IBCT          2400  [cha: y, def:6000, sav:1200]  Idle_b condition timer (100 ms)
-#  ICCT          6000  [cha: y, def:  0, sav:2400]  Idle_c condition timer (100 ms)
+#  ICT           20  [cha: y, def: 20, sav: 20]  Idle_a condition timer (100 ms)
+#  SCT           12000  [cha: y, def:  0, sav:6000]  Standby_z condition timer (100 ms)
+#  IBCT          6000  [cha: y, def:6000, sav:1200]  Idle_b condition timer (100 ms)
+#  ICCT          9000  [cha: y, def:  0, sav:2400]  Idle_c condition timer (100 ms)
 #  SYCT          0  [cha: y, def:  0, sav:  0]  Standby_y condition timer (100 ms)
 #  CCF_IDLE      1  [cha: y, def:  1, sav:  1]  check condition on transition from idle
 #  CCF_STAND     1  [cha: y, def:  1, sav:  1]  check condition on transition from standby
@@ -34,31 +34,22 @@
 
 # --config--
 IDLEA=1
-IDLEA_TIME=1200
+IDLEA_TIME=20
 IDLEB=1
-IDLEB_TIME=2400
+IDLEB_TIME=6000
 IDLEC=1
-IDLEC_TIME=6000
+IDLEC_TIME=9000
 STANDBY=1
-STANDBY_TIME=9000
+STANDBY_TIME=12000
 # --config--
 # --bin--
-SMARTCTL=/usr/sbin/smartctl
 SDPARM=/usr/bin/sdparm
 # --bin--
-# --dev list--
-DISKS=$(ls /dev/sd[a-z])
-# --dev list--
 
 (
-for DEVNAME in $DISKS ; do
   # SAS device filter
-  if [ "$($SMARTCTL -i $DEVNAME | grep protocol | sed -r 's/.*protocol: *(.*) .*/\1/')" == "SAS" ] ; then
-
-    $SDPARM --flexible -6 -v -S -p po -s IDLE=$IDLEA,ICT=$IDLEA_TIME,IDLE_B=$IDLEB,IBCT=$IDLEB_TIME,IDLE_C=$IDLEC,ICCT=$IDLEC_TIME,STANDBY=$STANDBY,SCT=$STANDBY_TIME $DEVNAME
-    $SDPARM --flexible -6 -p po -l $DEVNAME
-
-  fi
-
+for DISK in $(ls -la /dev/disk/by-path/*-sas-* | egrep -v "part[0-9]+ " |sed 's/.*\///') ; do
+  sdparm --set IDLE=$IDLEA,ICT=$IDLEA_TIME,IDLE_B=$IDLEB,IBCT=$IDLEB_TIME,IDLE_C=$IDLEC,ICCT=$IDLEC_TIME,STANDBY=$STANDBY,SCT=$STANDBY_TIME -S /dev/$DISK
+  $SDPARM --flexible -6 -p po -l /dev/$DISK
 done
 ) &
